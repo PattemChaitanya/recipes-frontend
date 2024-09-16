@@ -1,0 +1,150 @@
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Chip,
+  Typography,
+} from "@mui/material";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { fetchSingleRecipes } from "../app/slices/recipesSlice";
+// import { useGetRecipesQuery } from "../app/api/recipeApi";
+import { useGetRecipeByIdQuery } from "../app/api/singleRecipe";
+
+const RecipePage = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const { singleRecipe, singleStatus, singleError } = useSelector(
+    (state) => state.recipes
+  );
+  // const { data } = useGetRecipesQuery();
+  const { data } = useGetRecipeByIdQuery(id);
+  useEffect(() => {
+    if (singleRecipe === null) {
+      dispatch(fetchSingleRecipes(id));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  console.log(data);
+
+  return (
+    <>
+      {singleStatus === "loading" ? (
+        <Typography
+          variant="h5"
+          sx={{ marginTop: "200px", textAlign: "center" }}
+        >
+          LOADING...
+        </Typography>
+      ) : singleStatus === "failed" ? (
+        <Typography
+          variant="h6"
+          color="error"
+          sx={{ marginTop: "200px", textAlign: "center" }}
+        >
+          Error: {singleError}
+        </Typography>
+      ) : (
+        <div style={{ marginTop: "200px", padding: "20px" }}>
+          <Card sx={{ display: "flex", maxWidth: 1000, m: "auto", mb: 2 }}>
+            <Box
+              sx={{ display: "flex", flexDirection: "column", width: "100%" }}
+            >
+              <CardHeader
+                title={singleRecipe?.title}
+                titleTypographyProps={{ align: "center", variant: "h4" }}
+              />
+              <CardContent sx={{ flex: "1 0 auto" }}>
+                <Typography variant="body1" color="text.secondary">
+                  {singleRecipe?.description}
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Prep Time: {singleRecipe?.prepTime} mins | Cook Time:{" "}
+                  {singleRecipe?.cookTime} mins
+                </Typography>
+              </CardContent>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                mt: "10px",
+                mr: "10px",
+              }}
+            >
+              <CardMedia
+                component="img"
+                sx={{
+                  width: 250,
+                  height: "auto",
+                  borderRadius: "5px",
+                }}
+                image={singleRecipe?.recipeImage}
+                alt="Recipe image"
+              />
+            </Box>
+          </Card>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              m: "auto",
+              maxWidth: 1000,
+              gap: 2,
+            }}
+          >
+            <Card sx={{ flex: 1, maxWidth: { sm: "33.33%" } }}>
+              <CardHeader
+                title="Ingredients"
+                titleTypographyProps={{ align: "center" }}
+              />
+              <CardContent>
+                <ul>
+                  {singleRecipe?.recipeIngredients?.map((ingredient, index) => (
+                    <li key={index}>
+                      <Typography variant="body2" color="text.secondary">
+                        {ingredient}
+                      </Typography>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+            <Card sx={{ flex: 2, maxWidth: { sm: "66.66%" } }}>
+              <CardHeader
+                title="Instructions"
+                titleTypographyProps={{ align: "center" }}
+              />
+              <CardContent>
+                <ul>
+                  {singleRecipe?.recipeInstructions.map((item, index) => (
+                    <li key={index}>
+                      <Typography variant="body2" color="text.secondary">
+                        {item.title}
+                      </Typography>
+                      {item.ingredients &&
+                        item.ingredients.map((ingredient, i) => (
+                          <Chip
+                            key={i}
+                            label={ingredient}
+                            variant="outlined"
+                            sx={{ margin: 0.5 }}
+                          />
+                        ))}
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </Box>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default RecipePage;
