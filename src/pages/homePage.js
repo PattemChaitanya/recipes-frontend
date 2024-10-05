@@ -15,14 +15,14 @@ const HomePage = () => {
   const gettingDetails = async () => {
     const deviceInfo = await getDeviceInfo();
     firebaseCallingFunctions("post", deviceInfo);
-  };
-
-  useEffect(() => {
-    process.env.NODE_ENV !== "development" && gettingDetails();
     globalAnalytics({
       eventName: "viewer_home_page",
       type: "pageOnEnter",
     });
+  };
+
+  useEffect(() => {
+    process.env.NODE_ENV !== "development" && gettingDetails();
   }, []);
 
   if (status === "loading") {
