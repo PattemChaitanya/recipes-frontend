@@ -1,6 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { db } from "../../config/firebaseConfig";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  query,
+} from "firebase/firestore";
 
 const initialState = {
   recipes: [],
@@ -9,6 +16,7 @@ const initialState = {
   singleRecipe: null,
   singleError: null,
   singleStatus: "loading",
+  open: false,
 };
 
 const recipeCollection = "modified-recipes";
@@ -17,7 +25,9 @@ export const fetchRecipes = createAsyncThunk(
   "recipes/fetchRecipes",
   async (_, { rejectWithValue }) => {
     try {
-      const querySnapshot = await getDocs(collection(db, recipeCollection));
+      const querySnapshot = await getDocs(
+        query(collection(db, recipeCollection), limit(10))
+      );
       const recipesList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -55,6 +65,9 @@ const recipesSlice = createSlice({
       const id = action.payload;
       state.singleRecipe = state.recipes.find((recipe) => recipe.id === id);
     },
+    handleSearchModal: (state, action) => {
+      state.open = !state.open;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -83,5 +96,5 @@ const recipesSlice = createSlice({
   },
 });
 
-export const { setSingleRecipe } = recipesSlice.actions;
+export const { setSingleRecipe, handleSearchModal } = recipesSlice.actions;
 export default recipesSlice.reducer;

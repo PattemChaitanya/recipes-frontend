@@ -10,20 +10,24 @@ import {
   ListItemText,
   Stack,
   Toolbar,
+  Typography,
 } from "@mui/material";
 import logo from "../assets/logo-white.png";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { Link, useNavigate } from "react-router-dom";
+import { handleSearchModal } from "../app/slices/recipesSlice";
+import { useDispatch } from "react-redux";
 
 const Navbar = () => {
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 500);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const listOptions = [
     { name: "All Recipes", location: "recipes" },
-    { name: "Search", location: "" },
+    { name: "Search", location: "search" },
   ];
 
   const toggleDrawer = (newOpen) => () => {
@@ -31,8 +35,10 @@ const Navbar = () => {
   };
 
   const handleNavigation = (location) => {
-    if (location.length > 0) {
+    if (location !== "search") {
       navigate(location);
+    } else {
+      dispatch(handleSearchModal());
     }
   };
 
@@ -71,9 +77,21 @@ const Navbar = () => {
           />
         </Link>
         {!isMobileView ? (
-          <Stack direction="row">
-            <Link to="/recipes">All Recipes</Link>
-            <Link to="/search">Search</Link>
+          <Stack direction="row" gap="10px">
+            <Typography
+              variant="body2"
+              sx={{ cursor: "pointer" }}
+              onClick={() => handleNavigation("recipes")}
+            >
+              All Recipes
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{ cursor: "pointer" }}
+              onClick={() => handleNavigation("search")}
+            >
+              Search
+            </Typography>
           </Stack>
         ) : (
           <IconButton

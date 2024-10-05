@@ -45,7 +45,12 @@ const RecipePage = () => {
         <link rel="canonical" href="http://mysite.com/example" />
         <meta name="description" content={singleRecipe?.description} />
       </Helmet>
-      <div style={{ marginTop: "80px", padding: "20px" }}>
+      <div
+        style={{
+          marginTop: window.innerWidth > 500 ? "100px" : "65px",
+          padding: "20px",
+        }}
+      >
         <Card
           sx={{
             display: "flex",
@@ -55,7 +60,13 @@ const RecipePage = () => {
             flexDirection: { xs: "column", sm: "row" },
           }}
         >
-          <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+            }}
+          >
             <CardHeader
               title={singleRecipe?.title}
               titleTypographyProps={{
@@ -74,7 +85,7 @@ const RecipePage = () => {
               <Typography variant="body1" color="text.secondary">
                 {singleRecipe?.description}
               </Typography>
-              <Typography mt={3} variant="body1" color="text.secondary">
+              <Typography mt={2} variant="body1" color="text.secondary">
                 Prep Time:{" "}
                 <Typography
                   component="span"
@@ -100,7 +111,7 @@ const RecipePage = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              my: "10px",
+              mb: "10px",
               mr: "10px",
             }}
           >

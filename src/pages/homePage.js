@@ -3,8 +3,10 @@ import { Autocomplete, Box, Container, TextField } from "@mui/material";
 import { useSelector } from "react-redux";
 import RecipeCard from "../component/card";
 import Loader from "../component/loader";
+import { useGetRecipesQuery } from "../app/api/recipeApi";
 
 const HomePage = () => {
+  useGetRecipesQuery();
   const { recipes, status, error } = useSelector((state) => state.recipes);
 
   const linkToRecipePage = (title) => {
@@ -65,19 +67,17 @@ const HomePage = () => {
       >
         {error === "failed"
           ? error
-          : recipes
-              .slice(0, 10)
-              .map((item, index) => (
-                <RecipeCard
-                  key={index}
-                  id={item.id}
-                  title={item.title}
-                  image={item.recipeImage}
-                  description={item.description}
-                  cookTime={item.cookTime}
-                  prepTime={item.prepTime}
-                />
-              ))}
+          : recipes.map((item, index) => (
+              <RecipeCard
+                key={index}
+                id={item.id}
+                title={item.title}
+                image={item.recipeImage}
+                description={item.description}
+                cookTime={item.cookTime}
+                prepTime={item.prepTime}
+              />
+            ))}
       </Box>
     </Container>
   );

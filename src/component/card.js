@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
-import { red } from "@mui/material/colors";
 import { Link } from "react-router-dom";
 
 const RecipeCard = ({ id, title, description, image, cookTime, prepTime }) => {
@@ -42,19 +41,21 @@ const RecipeCard = ({ id, title, description, image, cookTime, prepTime }) => {
             {title}
           </Typography>
         </Link>
-        {description.length > 50 ? (
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {description.slice(0, 40)}{" "}
-            <Typography component="span" variant="caption" color={red[500]}>
-              {" "}
-              Read more
-            </Typography>
-          </Typography>
-        ) : (
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {description}
-          </Typography>
-        )}
+        <Typography
+          variant="body2"
+          sx={{
+            color: "text.secondary",
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            lineHeight: 1.5,
+            maxHeight: `calc(1.5em * 2)`,
+          }}
+        >
+          {description}
+        </Typography>
       </CardContent>
       <CardActions
         disableSpacing

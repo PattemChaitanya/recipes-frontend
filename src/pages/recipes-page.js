@@ -2,11 +2,13 @@ import React from "react";
 import { useGetRecipesQuery } from "../app/api/recipeApi";
 import { useSelector } from "react-redux";
 import Loader from "../component/loader";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const RecipesPage = () => {
   useGetRecipesQuery();
   const { data, loading, error } = useSelector((state) => state.allRecipes);
+  const columnToShow = window.innerWidth > 500 ? 2 : 3;
 
   if (loading) {
     return <Loader isLoading={loading} />;
@@ -17,10 +19,11 @@ const RecipesPage = () => {
   }
 
   return (
-    <div
+    <Box
+      component="div"
       style={{
         display: "flex",
-        gap: "8px",
+        gap: "16px",
         alignItems: "center",
         flexDirection: "column",
         padding: "0 16px 16px",
@@ -32,14 +35,16 @@ const RecipesPage = () => {
       </Typography>
       {data?.length > 0 &&
         data.map((item) => (
-          <div
+          <Box
+            component="div"
             style={{
               display: "flex",
-              width: "600px",
+              width: "800px",
               maxWidth: "100%",
               border: "1px solid #cecece",
               borderRadius: "8px",
-              gap: "8px",
+              gap: "16px",
+              padding: 0,
             }}
           >
             <img
@@ -53,12 +58,14 @@ const RecipesPage = () => {
                 borderBottomLeftRadius: "8px",
               }}
             />
-            <div
+            <Link
+              to={`/recipe/${item.id}`}
               style={{
                 display: "flex",
                 flexDirection: "column",
                 width: `calc(100% - 150px)`,
-                padding: "8px 8px 8px 0",
+                padding: "8px 16px 8px 0",
+                color: "#000",
               }}
             >
               <Typography variant="subtitle1" fontWeight="600">
@@ -67,21 +74,21 @@ const RecipesPage = () => {
               <Typography
                 variant="body2"
                 style={{
-                  display: "-webkit-Box",
-                  "-webkit-line-clamp": 2,
-                  "-webkit-box-orient": "vertical",
+                  display: "-webkit-box",
+                  WebkitLineClamp: columnToShow,
+                  WebkitBoxOrient: "vertical",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   lineHeight: 1.5,
-                  maxHeight: `calc(1.5em * 2)`,
+                  maxHeight: `calc(1.5em * ${columnToShow})`,
                 }}
               >
                 {item.description}
               </Typography>
-            </div>
-          </div>
+            </Link>
+          </Box>
         ))}
-    </div>
+    </Box>
   );
 };
 
