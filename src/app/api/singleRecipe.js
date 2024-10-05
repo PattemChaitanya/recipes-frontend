@@ -2,7 +2,10 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const singleRecipeApi = createApi({
   reducerPath: "singleRecipeApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3099/api/v1" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl:
+      "https://us-central1-fourth-way-435809-a7.cloudfunctions.net/recipeApi/api/v1",
+  }),
   endpoints: (builder) => ({
     getRecipeById: builder.query({
       query: (id) => `recipe/${id}`,

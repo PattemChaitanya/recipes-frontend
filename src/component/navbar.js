@@ -14,13 +14,26 @@ import {
 import logo from "../assets/logo-white.png";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 500);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const listOptions = [
+    { name: "All Recipes", location: "recipes" },
+    { name: "Search", location: "" },
+  ];
 
   const toggleDrawer = (newOpen) => () => {
     setIsDrawerOpen(newOpen);
+  };
+
+  const handleNavigation = (location) => {
+    if (location.length > 0) {
+      navigate(location);
+    }
   };
 
   useEffect(() => {
@@ -46,7 +59,7 @@ const Navbar = () => {
           paddingInline: "16px",
         }}
       >
-        <a href="/" style={{ padding: 0, margin: "auto 0" }}>
+        <Link to="/" style={{ padding: 0, margin: "auto 0" }}>
           <img
             src={logo}
             alt="Chey's Diary"
@@ -56,7 +69,7 @@ const Navbar = () => {
               marginTop: 10,
             }}
           />
-        </a>
+        </Link>
         {!isMobileView ? (
           <Stack direction="row">
             <a href="/recipes">All Recipes</a>
@@ -94,16 +107,17 @@ const Navbar = () => {
               onKeyDown={toggleDrawer(false)}
             >
               <List>
-                {["All Recipes", "Search"].map((text, index) => (
+                {listOptions.map((text, index) => (
                   <ListItem key={text} disablePadding>
                     <ListItemButton
+                      onClick={() => handleNavigation(text.location)}
                       sx={
                         index % 2 === 0
                           ? { paddingBottom: 0 }
                           : { paddingTop: 0 }
                       }
                     >
-                      <ListItemText primary={text} />
+                      <ListItemText primary={text.name} />
                     </ListItemButton>
                   </ListItem>
                 ))}

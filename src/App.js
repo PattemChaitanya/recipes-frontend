@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { BrowserRouter } from "react-router-dom";
 import MainRoutes from "./config/routes";
 import Navbar from "./component/navbar";
 import { useDispatch } from "react-redux";
@@ -15,9 +14,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <BrowserRouter>
-        <MainRoutes />
-      </BrowserRouter>
+      <MainRoutes />
     </>
   );
 }

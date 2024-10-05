@@ -7,35 +7,25 @@ import {
   Chip,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { useParams } from "react-router-dom";
-import { fetchSingleRecipes } from "../app/slices/recipesSlice";
 import { Helmet } from "react-helmet";
+import { useGetRecipeByIdQuery } from "../app/api/singleRecipe";
+import Loader from "../component/loader";
 
 const RecipePage = () => {
   const { id } = useParams();
-  const dispatch = useDispatch();
-  const { singleRecipe, singleStatus, singleError } = useSelector(
-    (state) => state.recipes
-  );
+  const {
+    data: singleRecipe,
+    isLoading: singleStatus,
+    isError: singleError,
+  } = useGetRecipeByIdQuery(id);
 
-  useEffect(() => {
-    if (singleRecipe === null) {
-      dispatch(fetchSingleRecipes(id));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  if (singleStatus === "loading") {
-    return (
-      <Typography variant="h5" sx={{ marginTop: "200px", textAlign: "center" }}>
-        LOADING...
-      </Typography>
-    );
+  if (singleStatus) {
+    return <Loader isLoading={singleStatus} />;
   }
 
-  if (singleStatus === "failed") {
+  if (singleStatus) {
     return (
       <Typography
         variant="h6"
