@@ -72,8 +72,8 @@ const Navbar = () => {
         </Link>
         {!isMobileView ? (
           <Stack direction="row">
-            <a href="/recipes">All Recipes</a>
-            <a href="/search">Search</a>
+            <Link to="/recipes">All Recipes</Link>
+            <Link to="/search">Search</Link>
           </Stack>
         ) : (
           <IconButton

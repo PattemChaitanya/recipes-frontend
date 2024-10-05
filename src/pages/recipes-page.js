@@ -24,10 +24,12 @@ const RecipesPage = () => {
         alignItems: "center",
         flexDirection: "column",
         padding: "0 16px 16px",
-        marginTop: window.innerWidth > 500 ? "90px" : "70px",
+        marginTop: window.innerWidth > 500 ? "100px" : "80px",
       }}
     >
-      <Typography variant="h5">Recipes i would love to have</Typography>
+      <Typography variant="h5" mb={2}>
+        Recipes i would love to have
+      </Typography>
       {data?.length > 0 &&
         data.map((item) => (
           <div

@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Autocomplete,
-  Box,
-  Container,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Autocomplete, Box, Container, TextField } from "@mui/material";
 import { useSelector } from "react-redux";
 import RecipeCard from "../component/card";
 import Loader from "../component/loader";
