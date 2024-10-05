@@ -1,5 +1,5 @@
 import React from "react";
-import { Autocomplete, Box, Container, TextField } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import RecipeCard from "../component/card";
 import Loader from "../component/loader";
@@ -8,13 +8,6 @@ import { useGetRecipesQuery } from "../app/api/recipeApi";
 const HomePage = () => {
   useGetRecipesQuery();
   const { recipes, status, error } = useSelector((state) => state.recipes);
-
-  const linkToRecipePage = (title) => {
-    const recipeFilter = recipes.find(
-      (item) => item.title.toLowerCase() === title.toLowerCase()
-    );
-    window.location.href = `/recipe/${recipeFilter.id}`;
-  };
 
   if (status === "loading") {
     return <Loader isLoading={status} />;
@@ -29,32 +22,9 @@ const HomePage = () => {
         paddingBottom: 2,
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          width: { xs: "100%", md: "600px" },
-          margin: "auto",
-          alignItems: "center",
-          mb: 2,
-        }}
-      >
-        <Autocomplete
-          freeSolo
-          options={recipes.map((recipe) => recipe.title)}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              fullWidth
-              variant="outlined"
-              placeholder="Search a recipe in database"
-              size="small"
-            />
-          )}
-          sx={{ xs: "100%", flexGrow: 1 }}
-          onChange={(event, value) => linkToRecipePage(value)}
-        />
-      </Box>
+      <Typography variant="h5" mb={2} textAlign="center">
+        Recipes I liked so much
+      </Typography>
       <Box
         sx={{
           width: "100%",

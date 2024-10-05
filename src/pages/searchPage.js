@@ -16,12 +16,13 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
-  minHeight: 300,
+  width: 600,
+  height: 400,
   maxWidth: "80%",
   bgcolor: "background.paper",
+  borderRadius: "8px",
   boxShadow: 24,
-  p: 4,
+  overflow: "auto",
 };
 
 const SearchPage = () => {
@@ -75,11 +76,24 @@ const SearchPage = () => {
           onChange={(e) => setSearchText(e.target.value)}
           fullWidth
           margin="normal"
+          sx={{
+            position: "sticky",
+            top: "-0.5px",
+            zIndex: 10,
+            background: "#fff",
+            p: "20px 24px",
+            m: 0,
+            boxShadow: 2,
+          }}
         />
-        <List>
-          {searchText.length > 2 &&
+        <List sx={{ p: 0 }}>
+          {searchText.length > 1 &&
             filteredItems.map((item, index) => (
-              <ListItem key={index} onClick={() => handleNavigation(item)}>
+              <ListItem
+                key={index}
+                onClick={() => handleNavigation(item)}
+                sx={{ borderBottom: "1px solid #cecece" }}
+              >
                 <ListItemText
                   primary={item}
                   sx={{ textTransform: "capitalize" }}

@@ -18,6 +18,7 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { Link, useNavigate } from "react-router-dom";
 import { handleSearchModal } from "../app/slices/recipesSlice";
 import { useDispatch } from "react-redux";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
 const Navbar = () => {
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 500);
@@ -77,7 +78,7 @@ const Navbar = () => {
           />
         </Link>
         {!isMobileView ? (
-          <Stack direction="row" gap="10px">
+          <Stack direction="row" gap="10px" alignItems="center">
             <Typography
               variant="body2"
               sx={{ cursor: "pointer" }}
@@ -86,10 +87,20 @@ const Navbar = () => {
               All Recipes
             </Typography>
             <Typography
-              variant="body2"
-              sx={{ cursor: "pointer" }}
+              sx={{
+                cursor: "pointer",
+                border: "1px solid #cecece",
+                paddingRight: "48px",
+                borderRadius: "8px",
+                fontSize: "16px !important",
+                display: "inline-flex",
+                alignItems: "center",
+              }}
               onClick={() => handleNavigation("search")}
             >
+              <IconButton sx={{ color: "#fff" }}>
+                <SearchRoundedIcon />
+              </IconButton>
               Search
             </Typography>
           </Stack>
