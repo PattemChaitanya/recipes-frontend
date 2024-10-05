@@ -12,10 +12,13 @@ import {
 } from "@mui/material";
 import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
 import { red } from "@mui/material/colors";
+import { Link } from "react-router-dom";
 
 const RecipeCard = ({ id, title, description, image, cookTime, prepTime }) => {
   const handleLinkCopy = () => {
-    navigator.clipboard.writeText(`https://chey-diary/recipe/${id}`);
+    navigator.clipboard.writeText(
+      `${process.env.REACT_APP_SITE_APP}/recipe/${id}`
+    );
     alert("Link Copied");
   };
 
@@ -23,14 +26,22 @@ const RecipeCard = ({ id, title, description, image, cookTime, prepTime }) => {
     <Card sx={{ width: "32%", minWidth: 345 }}>
       <CardMedia component="img" height="194" image={image} alt={title} />
       <CardContent sx={{ pb: 1 }}>
-        <Typography
-          variant="subtitle1"
-          component="a"
-          href={`/recipe/${id}`}
-          sx={{ color: "text.secondary", fontWeight: 600 }}
+        <Link
+          to={`/recipe/${id}`}
+          style={{
+            display: "flex",
+            padding: 0,
+            height: "fit-content",
+            margin: 0,
+          }}
         >
-          {title}
-        </Typography>
+          <Typography
+            variant="subtitle1"
+            sx={{ color: "text.secondary", fontWeight: 600 }}
+          >
+            {title}
+          </Typography>
+        </Link>
         {description.length > 50 ? (
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
             {description.slice(0, 40)}{" "}
