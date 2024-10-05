@@ -40,6 +40,7 @@ export const getDeviceInfo = async () => {
     language: navigator.language,
     screen_resolution: `${window.screen.width}x${window.screen.height}`,
     geoLocation,
+    deviceType: window.screen.width > window.screen.height ? "web" : "mobile",
   };
 
   return deviceInfo;
