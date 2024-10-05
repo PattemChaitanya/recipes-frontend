@@ -29,7 +29,10 @@ const HomePage = () => {
           LOADING...
         </Typography>
       ) : (
-        <Container component="main" sx={{ marginTop: "100px", width: "100%" }}>
+        <Container
+          component="main"
+          sx={{ marginTop: "90px", width: "100%", paddingBottom: 2 }}
+        >
           <Box
             sx={{
               display: "flex",
@@ -59,10 +62,11 @@ const HomePage = () => {
           <Box
             sx={{
               width: "100%",
-              border: "1px solid black",
               display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
               flexWrap: "wrap",
-              gap: 2,
+              gap: "18px",
             }}
           >
             {error === "failed"

@@ -8,14 +8,16 @@ const initialState = {
   error: null,
   singleRecipe: null,
   singleError: null,
-  singleStatus: "idle",
+  singleStatus: "loading",
 };
+
+const recipeCollection = "modified-recipes";
 
 export const fetchRecipes = createAsyncThunk(
   "recipes/fetchRecipes",
   async (_, { rejectWithValue }) => {
     try {
-      const querySnapshot = await getDocs(collection(db, "recipes"));
+      const querySnapshot = await getDocs(collection(db, recipeCollection));
       const recipesList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -32,7 +34,7 @@ export const fetchSingleRecipes = createAsyncThunk(
   "recipes/fetchSingleRecipe",
   async (id, { rejectWithValue }) => {
     try {
-      const docSnap = await getDoc(doc(db, "recipes", id));
+      const docSnap = await getDoc(doc(db, recipeCollection, id));
 
       if (docSnap.exists()) {
         return { id: docSnap.id, ...docSnap.data() };
