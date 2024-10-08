@@ -1,10 +1,19 @@
-- light and dark mode in navbar
+# Chey's Diary
+Welcome to Chey's Diary, a personal blog capturing thoughts, experiences, and reflections. Built with modern web technologies, this site offers a clean, minimalist design for easy reading. The diary entries cover a range of topics, including lifestyle, personal growth, and everyday musings.
 
-## Pages
+Features:
+User-friendly, responsive design
+Simple and intuitive navigation
+Personal insights and stories
+Check out the live site here.
 
-- recipe home page
-- single recipe page
-- search page
-- scarping page -> it look after scrapping -> removes data from database due to copy right issues. Just to showcase how it works. -> 
-- login popup
-- edit, deletion diliemma -> only works for login user -> but comes back onces you refresh
+Installation:
+Clone the repo and run locally using:
+
+```
+git clone https://github.com/PattemChaitanya/recipes-frontend.git
+
+npm install
+
+npm start
+```

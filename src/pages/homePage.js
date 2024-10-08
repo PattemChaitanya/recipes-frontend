@@ -1,16 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Container, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import RecipeCard from "../component/card";
 import Loader from "../component/loader";
-import { useGetRecipesQuery } from "../app/api/recipeApi";
 import { getDeviceInfo } from "../config/user-details";
 import { firebaseCallingFunctions } from "../utils/firebase-functions";
 import { globalAnalytics } from "../config/firebase-analytics";
 
 const HomePage = () => {
-  useGetRecipesQuery();
-  const { recipes, status, error } = useSelector((state) => state.recipes);
+  const { recipesToLimit: recipes, error } = useSelector(
+    (state) => state.recipes
+  );
+  const [isLoading, setIsLoading] = useState(true);
 
   const gettingDetails = async () => {
     const deviceInfo = await getDeviceInfo();
@@ -23,10 +24,13 @@ const HomePage = () => {
 
   useEffect(() => {
     process.env.NODE_ENV !== "development" && gettingDetails();
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
   }, []);
 
-  if (status === "loading") {
-    return <Loader isLoading={status} />;
+  if (recipes.length === 0) {
+    return <Loader isLoading={isLoading} />;
   }
 
   return (
