@@ -1,94 +1,65 @@
 import React from "react";
-import { useGetRecipesQuery } from "../app/api/recipeApi";
-import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
+import { Box, Container, Grid, Alert } from "@mui/material";
+import RecipeCard from "../component/card";
 import Loader from "../component/loader";
-import { Box, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useGetRecipesQuery } from "../app/api/recipeApi";
 
 const RecipesPage = () => {
-  useGetRecipesQuery();
-  const { data, loading, error } = useSelector((state) => state.allRecipes);
-  const columnToShow = window.innerWidth > 500 ? 2 : 3;
+  const { data: recipes, isLoading, isError, error } = useGetRecipesQuery();
 
-  if (loading) {
-    return <Loader isLoading={loading} />;
+  if (isLoading) {
+    return <Loader isLoading={isLoading} />;
   }
 
-  if (error) {
-    return <p>Error occurred</p>;
+  if (isError) {
+    return (
+      <Box sx={{ p: 3, textAlign: "center" }}>
+        <Alert severity="error" sx={{ maxWidth: 600, margin: "auto" }}>
+          {error?.message || "Error loading recipes. Please try again later."}
+        </Alert>
+      </Box>
+    );
+  }
+
+  if (!recipes || recipes.length === 0) {
+    return (
+      <Box sx={{ p: 3, textAlign: "center" }}>
+        <Alert severity="info" sx={{ maxWidth: 600, margin: "auto" }}>
+          No recipes found
+        </Alert>
+      </Box>
+    );
   }
 
   return (
-    <Box
-      component="div"
-      style={{
-        display: "flex",
-        gap: "16px",
-        alignItems: "center",
-        flexDirection: "column",
-        padding: "0 16px 16px",
-        marginTop: window.innerWidth > 500 ? "100px" : "80px",
-      }}
-    >
-      <Typography variant="h5" mb={2}>
-        Recipes i would love to have
-      </Typography>
-      {data?.length > 0 &&
-        data.map((item) => (
-          <Box
-            component="div"
-            style={{
-              display: "flex",
-              width: "800px",
-              maxWidth: "100%",
-              border: "1px solid #cecece",
-              borderRadius: "8px",
-              gap: "16px",
-              padding: 0,
-            }}
-          >
-            <img
-              src={item.recipeImage}
-              alt={item.title}
-              style={{
-                width: "150px",
-                height: "120px",
-                objectFit: "cover",
-                borderTopLeftRadius: "8px",
-                borderBottomLeftRadius: "8px",
-              }}
-            />
-            <Link
-              to={`/recipe/${item.id}`}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                width: `calc(100% - 150px)`,
-                padding: "8px 16px 8px 0",
-                color: "#000",
-              }}
-            >
-              <Typography variant="subtitle1" fontWeight="600">
-                {item.title}
-              </Typography>
-              <Typography
-                variant="body2"
-                style={{
-                  display: "-webkit-box",
-                  WebkitLineClamp: columnToShow,
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  lineHeight: 1.5,
-                  maxHeight: `calc(1.5em * ${columnToShow})`,
-                }}
-              >
-                {item.description}
-              </Typography>
-            </Link>
-          </Box>
-        ))}
-    </Box>
+    <>
+      <Helmet defer={false}>
+        <title>{"Recipes - Chey's Diary"}</title>
+        <meta
+          name="description"
+          content="Explore a collection of delicious recipes from Chey's Diary"
+        />
+      </Helmet>
+      <Container maxWidth="xl" sx={{ mt: { xs: 8, sm: 12 }, mb: 4 }}>
+        <Grid container spacing={4}>
+          {recipes.map((recipe) => (
+            <Grid item key={recipe.id} xs={12} sm={6} md={4} lg={3}>
+              <RecipeCard
+                id={recipe.id}
+                title={recipe.title}
+                description={recipe.description}
+                prepTime={recipe.prepTime}
+                cookTime={recipe.cookTime}
+                totalTime={recipe.totalTime}
+                servings={recipe.servings}
+                recipeImage={recipe.recipeImage}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </>
   );
 };
 

@@ -6,6 +6,7 @@ import {
   CardMedia,
   Chip,
   Typography,
+  Alert,
 } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
@@ -25,29 +26,36 @@ const RecipePage = () => {
     return <Loader isLoading={singleStatus} />;
   }
 
-  if (singleStatus) {
+  if (singleError) {
     return (
-      <Typography
-        variant="h6"
-        color="error"
-        sx={{ marginTop: "200px", textAlign: "center" }}
-      >
-        Error: {singleError}
-      </Typography>
+      <Box sx={{ p: 3, textAlign: "center" }}>
+        <Alert severity="error" sx={{ maxWidth: 600, margin: "auto" }}>
+          {singleError.message ||
+            "Error loading recipe. Please try again later."}
+        </Alert>
+      </Box>
+    );
+  }
+
+  if (!singleRecipe) {
+    return (
+      <Box sx={{ p: 3, textAlign: "center" }}>
+        <Alert severity="info" sx={{ maxWidth: 600, margin: "auto" }}>
+          Recipe not found
+        </Alert>
+      </Box>
     );
   }
 
   return (
     <>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Chey's Diary - {singleRecipe?.title}</title>
-        <link rel="canonical" href="http://mysite.com/example" />
-        <meta name="description" content={singleRecipe?.description} />
+      <Helmet defer={false}>
+        <title>{(singleRecipe.title || "") + " - Chey's Diary"}</title>
+        <meta name="description" content={singleRecipe.description || ""} />
       </Helmet>
-      <div
-        style={{
-          marginTop: window.innerWidth > 500 ? "100px" : "65px",
+      <Box
+        sx={{
+          marginTop: { xs: "65px", sm: "100px" },
           padding: "20px",
         }}
       >
@@ -68,7 +76,7 @@ const RecipePage = () => {
             }}
           >
             <CardHeader
-              title={singleRecipe?.title}
+              title={singleRecipe.title}
               titleTypographyProps={{
                 align: "center",
                 variant: "h4",
@@ -83,27 +91,53 @@ const RecipePage = () => {
               }}
             >
               <Typography variant="body1" color="text.secondary">
-                {singleRecipe?.description}
+                {singleRecipe.description || "No description available"}
               </Typography>
-              <Typography mt={2} variant="body1" color="text.secondary">
-                Prep Time:{" "}
-                <Typography
-                  component="span"
-                  variant="subtitle1"
-                  sx={{ fontWeight: 600 }}
-                >
-                  {singleRecipe?.prepTime}
-                </Typography>{" "}
-                mins | Cook Time:{" "}
-                <Typography
-                  component="span"
-                  variant="subtitle1"
-                  sx={{ fontWeight: 600 }}
-                >
-                  {singleRecipe?.cookTime}
-                </Typography>{" "}
-                mins
-              </Typography>
+              <Box sx={{ mt: 2, display: "flex", gap: 2, flexWrap: "wrap" }}>
+                <Typography variant="body1" color="text.secondary">
+                  Total Time:{" "}
+                  <Typography
+                    component="span"
+                    variant="subtitle1"
+                    sx={{ fontWeight: 600 }}
+                  >
+                    {singleRecipe.totalTime || 0}
+                  </Typography>{" "}
+                  mins
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Prep Time:{" "}
+                  <Typography
+                    component="span"
+                    variant="subtitle1"
+                    sx={{ fontWeight: 600 }}
+                  >
+                    {singleRecipe.prepTime || 0}
+                  </Typography>{" "}
+                  mins
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Cook Time:{" "}
+                  <Typography
+                    component="span"
+                    variant="subtitle1"
+                    sx={{ fontWeight: 600 }}
+                  >
+                    {singleRecipe.cookTime || 0}
+                  </Typography>{" "}
+                  mins
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Servings:{" "}
+                  <Typography
+                    component="span"
+                    variant="subtitle1"
+                    sx={{ fontWeight: 600 }}
+                  >
+                    {singleRecipe.servings || 1}
+                  </Typography>
+                </Typography>
+              </Box>
             </CardContent>
           </Box>
           <Box
@@ -122,8 +156,8 @@ const RecipePage = () => {
                 height: 250,
                 borderRadius: "5px",
               }}
-              image={singleRecipe?.recipeImage}
-              alt={singleRecipe?.title}
+              image={singleRecipe.recipeImage}
+              alt={singleRecipe.title}
             />
           </Box>
         </Card>
@@ -156,7 +190,7 @@ const RecipePage = () => {
                   marginBottom: 0,
                 }}
               >
-                {singleRecipe?.recipeIngredients?.map((ingredient, index) => (
+                {singleRecipe.recipeIngredients?.map((ingredient, index) => (
                   <li key={index}>
                     <Typography variant="body2" color="text.secondary">
                       {ingredient}
@@ -178,7 +212,7 @@ const RecipePage = () => {
               titleTypographyProps={{ align: "center", paddingBottom: 0 }}
             />
             <CardContent sx={{ paddingTop: 0, paddingBottom: 0 }}>
-              <ul
+              <ol
                 style={{
                   paddingTop: 0,
                   paddingBottom: 0,
@@ -186,27 +220,36 @@ const RecipePage = () => {
                   marginBottom: 0,
                 }}
               >
-                {singleRecipe?.recipeInstructions.map((item, index) => (
+                {singleRecipe.recipeInstructions?.map((instruction, index) => (
                   <li key={index}>
-                    <Typography variant="body2" color="text.secondary">
-                      {item.title}
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      paragraph
+                    >
+                      {instruction.title}
                     </Typography>
-                    {item.ingredients &&
-                      item.ingredients.map((ingredient, i) => (
-                        <Chip
-                          key={i}
-                          label={ingredient}
-                          variant="outlined"
-                          sx={{ textTransform: "capitalize", margin: 0.5 }}
-                        />
-                      ))}
+                    {instruction.ingredients &&
+                      instruction.ingredients.length > 0 && (
+                        <Box sx={{ mb: 1 }}>
+                          {instruction.ingredients.map((ingredient, i) => (
+                            <Chip
+                              key={i}
+                              label={ingredient}
+                              variant="outlined"
+                              size="small"
+                              sx={{ textTransform: "capitalize", margin: 0.5 }}
+                            />
+                          ))}
+                        </Box>
+                      )}
                   </li>
                 ))}
-              </ul>
+              </ol>
             </CardContent>
           </Card>
         </Box>
-      </div>
+      </Box>
     </>
   );
 };

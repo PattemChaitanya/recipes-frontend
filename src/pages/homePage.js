@@ -8,9 +8,11 @@ import { firebaseCallingFunctions } from "../utils/firebase-functions";
 import { globalAnalytics } from "../config/firebase-analytics";
 
 const HomePage = () => {
-  const { recipesToLimit: recipes, error } = useSelector(
+  const { recipesToLimit: recipesData, error } = useSelector(
     (state) => state.recipes
   );
+
+  const recipes = Object.values(recipesData).slice(0, 9);
   const [isLoading, setIsLoading] = useState(true);
 
   const gettingDetails = async () => {
@@ -66,6 +68,7 @@ const HomePage = () => {
                 description={item.description}
                 cookTime={item.cookTime}
                 prepTime={item.prepTime}
+                recipeImage={item.recipeImage}
               />
             ))}
       </Box>
