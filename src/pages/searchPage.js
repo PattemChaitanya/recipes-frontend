@@ -135,7 +135,7 @@ const SearchPage = () => {
     });
     
     setSearchResults(filtered);
-  }, [searchText]);
+  }, [searchText, allRecipeData]);
 
   const handleClose = () => {
     setSearchText("");
