@@ -9,6 +9,20 @@ export const recipesApi = createApi({
   endpoints: (builder) => ({
     getRecipes: builder.query({
       query: () => "recipes",
+      transformResponse: (response) => {
+        // Handle possible null or undefined response
+        if (!response) return [];
+        
+        // Handle nested data structure (common in Firebase responses)
+        const data = response.data || response;
+        
+        // Convert object to array if needed
+        if (data && typeof data === 'object' && !Array.isArray(data)) {
+          return Object.values(data);
+        }
+        
+        return data;
+      },
     }),
   }),
 });

@@ -13,20 +13,20 @@ import { useGetRecipesQuery } from "./app/api/recipeApi";
 
 function App() {
   const dispatch = useDispatch();
-  const { data, isLoading, isError } = useGetRecipesQuery();
+  const { data, isLoading, isError, isSuccess } = useGetRecipesQuery();
 
   useEffect(() => {
-    if (!isLoading) {
-      const recipesData = data.data;
+    if (isSuccess) {
+      const recipesData = data?.flat(2);
       dispatch(updateRecipes(recipesData));
-      dispatch(updateRecipesToLimit(recipesData.slice(0, 10)));
+      dispatch(updateRecipesToLimit(recipesData?.slice(0, 10)));
     }
     if (isError) {
       dispatch(updateError(isError));
     }
     dispatch(updateStatus(isLoading));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
+  }, [isSuccess]);
 
   return (
     <>
